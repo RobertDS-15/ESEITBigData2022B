@@ -20,6 +20,8 @@ def main(): #funcion principal
     data = get_data(filename)
     #Transformacion y Limpieza de los datos
     df_transformacion = get_transform(data)
+    #
+    #df_trans_localidad = get_localidad(df_transformacion)
     #TransGuarde el archivo nuevo y lo pegue en la carpeta processedformacion y Limpieza de los datos
     save_data(df_transformacion, filename)
 
@@ -40,9 +42,52 @@ def get_transform(data):
      #df_transform['UNIDAD'].value_counts(dropna=False) #Conteo de los valores sin eliminarme lo nulos
     df_transformacion = data['UNIDAD'].fillna('SIN_DATO').value_counts(dropna=False) # Reemplace en la columna UNIDAD los nulos por SIN_DATO
     df_transformacion = data['UNIDAD'] = data['UNIDAD'].fillna('SIN_DATO') #Sobreescribo la columna UNIDAD que tenia valores nulos por una columna nueva sin nulos
-       
+    df_transformacion = data   
+    
+    def cat(x):
+        if x == 1  :
+            return 'Usaquen'
+        if x == 2  :
+            return 'Chapinero'
+        if x == 3  :
+            return 'Santa Fe'
+        if x == 4  :
+            return 'San Cristobal'
+        if x == 5  :
+            return 'Usme'
+        if x == 6  :
+            return 'Tunjuelito'
+        if x == 7  :
+            return 'Bosa'
+        if x == 8  :
+            return 'Kenndy'
+        if x == 9  :
+            return 'Fontibon'
+        if x == 10  :
+            return 'Engativa'
+        if x == 11:
+            return 'Suba'
+        if x == 12  :
+            return 'Barrios Unidos'     
+        if x == 13:
+            return 'Teusaquillo'
+        if x == 14  :
+            return 'Los Martires'
+        if x == 15  :
+            return 'Antonio Narino'
+        if x == 16  :
+            return 'Puente Aranda'
+        if x == 17:
+            return 'La Calendaria'
+        if x == 18:
+            return 'Rafael Uribe Uribe'
+        if x == 19:
+            return 'Ciudad Bolivar'
+        if x == 20:
+            return 'Sumapaz'     
+    
+    df_transformacion['LOCALIDAD'] = df_transformacion['CODIGO_LOCALIDAD'].apply(lambda x: cat(x))
     return df_transformacion
-
 
 def save_data(df_transformacion, filename):
     out_name = 'eda_' + filename
