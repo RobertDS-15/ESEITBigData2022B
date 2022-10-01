@@ -27,7 +27,11 @@ def save_data(df, filename):
     out_path = os.path.join(root_dir, 'data','processed', out_name)
 
     #print(out_path)
-    df.to_csv(out_path)  
+    df.to_csv(out_path)
+    
+    #GUARDAR la tabla en BigQuery
+    df.to_gbq(destination_table="")
+    
 
 
 
