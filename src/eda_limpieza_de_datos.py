@@ -13,7 +13,8 @@ from dateutil.parser import parse
 import os
 from pathlib import Path #para traer las rutas
 
-root_dir=Path(".").resolve()#.parent #Directorio_raiz
+#root_dir=Path(".").resolve()#.parent #Directorio_raiz
+bucket = 'gs://rcortes_bucket_llamadas123'
 
 def main(): #funcion principal
     filename ="llamadas123_julio_2022.csv"
@@ -29,7 +30,7 @@ def main(): #funcion principal
 
 def get_data(filename):   
     data_dir = "raw" #directorio del archivo
-    filepath = os.path.join(root_dir, "data", data_dir, filename)
+    filepath = os.path.join(bucket, "data", data_dir, filename)
 
     print(filepath)
 
@@ -129,9 +130,13 @@ def get_transform(data):
 def save_data(df_transformacion, filename):
     out_name = 'eda_' + filename
     root_dir = Path(".").resolve()
-    out_path = os.path.join(root_dir, 'data','processed', out_name)
+    out_path = os.path.join(bucket, 'data','processed', out_name)
     print(out_path)
     df_transformacion.to_csv(out_path)
+    
+    #GUARDAR la tabla en BigQuery
+    df_transformacion.to_gbq(destination_table="espbigdataeseit2022_eda.llamadas_123_eda")
+    #df_transformacion.to_gbq(destination_table='espbigdataeseit2022.llamadas_123',  if_exists='append' )
 
 if __name__== '__main__':
     main()
