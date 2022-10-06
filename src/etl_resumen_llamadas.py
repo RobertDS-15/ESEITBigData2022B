@@ -10,7 +10,8 @@ import pandas as pd
 import os
 from pathlib import Path
 
-root_dir = Path(".").resolve()
+#root_dir = Path(".").resolve()
+bucket = 'gs://rcortes_bucket_llamadas123'
 
 def main(): #funcion principal
     filename = 'llamadas123_julio_2022.csv'
@@ -24,13 +25,13 @@ def main(): #funcion principal
 def save_data(df, filename):
     out_name = 'resumen_' + filename
     root_dir = Path(".").resolve()
-    out_path = os.path.join(root_dir, 'data','processed', out_name)
+    out_path = os.path.join(bucket, 'data','processed', out_name)
 
     #print(out_path)
     df.to_csv(out_path)
     
     #GUARDAR la tabla en BigQuery
-    df.to_gbq(destination_table="")
+    df.to_gbq(destination_table="espbigdataeseit2022.llamadas_123")
     
 
 
@@ -52,7 +53,7 @@ def get_summary(data):
 def get_data(filename):
     data_dir = "raw"
     #root_dir=Path(".").resolve()#.parent
-    filepath = os.path.join(root_dir, "data", data_dir, filename)
+    filepath = os.path.join(bucket, "data", data_dir, filename)
 
     data = pd.read_csv(filepath, encoding='latin-1', sep=';') #leer el archivo en la ruta
     return data
