@@ -17,7 +17,7 @@ from pathlib import Path #para traer las rutas
 bucket = 'gs://rcortes_bucket_llamadas123'
 
 def main(): #funcion principal
-    filename ="llamadas123_julio_2022.csv"
+    filename ="datos_abiertos_febrero_2022.csv"
     #Leer el archivo llamadas 123
     data = get_data(filename)
     #Transformacion y Limpieza de los datos
@@ -47,6 +47,9 @@ def get_transform(data):
     col = 'FECHA_INICIO_DESPLAZAMIENTO_MOVIL'
     df_transformacion[col] = pd.to_datetime(data[col], errors='coerce')
     pd.to_datetime(parse(data['RECEPCION'][13052], dayfirst=False))
+    #col1 = 'FECHA_INICIO_DESPLAZAMIENTO-MOVIL'
+    #df_transformacion[col1] = pd.to_datetime(data[col1], errors='coerce')
+    #pd.to_datetime(parse(data['RECEPCION'][13052], dayfirst=False))
     
     def convertir_formato_fecha(str_fecha):
         val_datetime = parse(str_fecha, dayfirst=False)
@@ -135,8 +138,8 @@ def save_data(df_transformacion, filename):
     df_transformacion.to_csv(out_path)
     
     #GUARDAR la tabla en BigQuery
-    df_transformacion.to_gbq(destination_table="espbigdataeseit2022_eda.llamadas_123_eda")
-    #df_transformacion.to_gbq(destination_table='espbigdataeseit2022.llamadas_123',  if_exists='append' )
+    #df_transformacion.to_gbq(destination_table="espbigdataeseit2022_eda.llamadas_123_eda")
+    df_transformacion.to_gbq(destination_table='espbigdataeseit2022_eda.llamadas_123',  if_exists='append' )
 
 if __name__== '__main__':
     main()
