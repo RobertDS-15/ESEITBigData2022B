@@ -40,6 +40,14 @@ def get_data(filename):
 
 
 def get_transform(data):
+    
+    data.rename(    columns = {
+    'FECHA_INICIO_DESPLAZAMIENTO-MOVIL' : 'FECHA_INICIO_DESPLAZAMIENTO_MOVIL',
+    'CODIGO DE LOCALIDAD'               : 'CODIGO_LOCALIDAD',
+    'CLASIFICACION FINAL'               : 'CLASIFICACION_FINAL'},
+    inplace=True
+    )
+    
     df_transformacion = data.drop_duplicates()
      #df_transform['UNIDAD'].value_counts(dropna=False) #Conteo de los valores sin eliminarme lo nulos
     df_transformacion = data['UNIDAD'].fillna('SIN_DATO').value_counts(dropna=False) # Reemplace en la columna UNIDAD los nulos por SIN_DATO
