@@ -17,7 +17,7 @@ from pathlib import Path #para traer las rutas
 bucket = 'gs://rcortes_bucket_llamadas123'
 
 def main(): #funcion principal
-    filename ="datos_abiertos_febrero_2022.csv"
+    filename ="llamadas123_julio_2022.csv"
     #Leer el archivo llamadas 123
     data = get_data(filename)
     #Transformacion y Limpieza de los datos
@@ -125,9 +125,9 @@ def get_transform(data):
             return 'Ciudad Bolivar'
         if x == 20:
             return 'Sumapaz'     
-    
+
     df_transformacion['LOCALIDAD'] = df_transformacion['CODIGO_LOCALIDAD'].apply(lambda x: cat(x))
-    df_transformacion = data
+    #df_transformacion = data
     return df_transformacion
 
 def save_data(df_transformacion, filename):
