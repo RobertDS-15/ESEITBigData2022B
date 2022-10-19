@@ -17,7 +17,7 @@ from pathlib import Path #para traer las rutas
 bucket = 'gs://rcortes_bucket_llamadas123'
 
 def main(): #funcion principal
-    filename ="llamadas123_julio_2022.csv"
+    filename ="llamadas123_agosto_2022.csv"
     #Leer el archivo llamadas 123
     data = get_data(filename)
     #Transformacion y Limpieza de los datos
@@ -54,10 +54,9 @@ def get_transform(data):
     df_transformacion = data['UNIDAD'] = data['UNIDAD'].fillna('SIN_DATO') #Sobreescribo la columna UNIDAD que tenia valores nulos por una columna nueva sin nulos
     col = 'FECHA_INICIO_DESPLAZAMIENTO_MOVIL'
     df_transformacion[col] = pd.to_datetime(data[col], errors='coerce')
-    pd.to_datetime(parse(data['RECEPCION'][13052], dayfirst=False))
-    #col1 = 'FECHA_INICIO_DESPLAZAMIENTO-MOVIL'
-    #df_transformacion[col1] = pd.to_datetime(data[col1], errors='coerce')
     #pd.to_datetime(parse(data['RECEPCION'][13052], dayfirst=False))
+    
+    
     
     def convertir_formato_fecha(str_fecha):
         val_datetime = parse(str_fecha, dayfirst=False)
@@ -67,7 +66,7 @@ def get_transform(data):
 
     lista_fechas = list()
     n_filas = data.shape[0] 
-        #n_filas = len(data['RECEPCION'])
+    #n_filas = len(data['RECEPCION'])
     for i in range(0, n_filas):
 
         str_fecha = data['RECEPCION'][i]
@@ -80,18 +79,16 @@ def get_transform(data):
             #print(i, e)
             lista_fechas.append(str_fecha)
             continue
-
+                
     data['RECEPCION_CORREGIDA'] = lista_fechas
     data['RECEPCION_CORREGIDA'] = pd.to_datetime(data['RECEPCION_CORREGIDA'], errors='coerce')
     data['EDAD']=data['EDAD'].replace({'SIN_DATO' : np.nan}) # reemplazar SIN_DATO por unn valor nulo de tipo numerico
-
-    field_edad   ='5'
-    f = lambda field_edad: field_edad if pd.isna(field_edad) == True else int(field_edad)
-
-    f(field_edad)
-
-    df_transformaciondata = data['EDAD']=data['EDAD'].apply(f)
-
+    data['EDAD'] = pd.to_numeric(data['EDAD'], errors='coerce')
+    data = data.dropna(subset=['EDAD'])
+    data['EDAD'] = data['EDAD'].astype(int)
+    
+    df_transformacion = data.reset_index()
+    
     def cat(x):
         if x == 1  :
             return 'Usaquen'
@@ -135,7 +132,6 @@ def get_transform(data):
             return 'Sumapaz'     
 
     df_transformacion['LOCALIDAD'] = df_transformacion['CODIGO_LOCALIDAD'].apply(lambda x: cat(x))
-    #df_transformacion = data
     return df_transformacion
 
 def save_data(df_transformacion, filename):
